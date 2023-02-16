@@ -1,0 +1,27 @@
+/* 페이지 공통 */
+#wrapper { width: 960px; margin: 0 auto; }
+
+nav ul { list-style: none; margin: 0; padding: 0 }
+nav ul li { display: inline-block; padding: 0 65px; }
+
+a:link { color: black; text-decoration: none; font-weight: bold; }
+a:visited { color: black; }
+a:hover { color: red; text-decoration: underline; }
+a:active { color: orange; }
+
+main { min-height: 500px; }
+
+hr { background: black; height: 2px; }
+.copy { text-align: center }
+
+/* 회원가입, 로그인 */
+form { width: 320px; margin: 0 auto; vertical-align: middle }
+div { padding: 5px }
+form label { display: inline-block; width: 110px;
+    text-align: right; font-weight: bold }
+form input { padding: 5px }
+button { padding: 5px 7px }
+/*새글쓰기, 본문보기*/
+.drgup {
+    vertical-align: top;
+}
