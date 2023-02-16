@@ -2,13 +2,18 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>index</title>
+    <title>myinfo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/normalize.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/project2.css">
     <style>
-        img { padding: 50px 110px ; width: 75% }
+        .myinfo, .myinfo td { /*border: 1px solid black;*/ }
+        .myinfo { border-collapse: collapse; width: 300px;
+            margin: 0 auto; }
+        .myinfo td { padding: 7px }
+        .myinfo td:first-child { font-weight: bold;
+            text-align: right }
     </style>
 </head>
 <body>
@@ -25,12 +30,17 @@
         <hr>
     </nav>
     <main>
-        <img src="../img/smile.png">
+        <h2>회원정보</h2>
+        <table class="myinfo">
+            <tr><td>아이디</td><td>zzyzzy</td></tr>
+            <tr><td>이름</td><td>홍길동</td></tr>
+            <tr><td>이메일</td><td>abc123@987xyz.co.kr</td></tr>
+            <tr><td>가입일</td><td>2022-12-19 12:17:36</td></tr>
+        </table>
     </main>
     <footer>
         <hr>
-        <div class="copy">
-            copyright &copy; 2023. zzyzzy. All Rights Reserved.</div>
+        <div class="copy">copyright &copy; 2023. zzyzzy. All Rights Reserved.</div>
     </footer>
 </div>
 </body>
