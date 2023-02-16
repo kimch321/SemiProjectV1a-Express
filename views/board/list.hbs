@@ -1,0 +1,81 @@
+{{#section 'css'}}
+    <style>
+        .board { width: 700px; margin: 0 auto;
+            table-layout: fixed; border-collapse: collapse }
+
+        .board td { text-align: center; padding: 7px }
+        .board td:nth-child(2) { white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis }
+        .board th { padding:7px;
+            background: lightgoldenrodyellow }
+        .board tr:nth-child(odd) { background: #e4f7ba }
+        .board tr:nth-child(even) { background: #cef279 }
+        .alignrgt { text-align-last: right }
+
+        .pagenation { list-style: none; padding: 0;
+            margin: 0 auto; width: 435px }
+        .pagenation li { display: inline-block; padding: 10px; }
+        .cpage { font: bold 48px '맑은 고딕'; color: red }
+        .prev { color: #cccccc }
+    </style>
+{{/section}}
+    <main>
+        <h2>게시판</h2>
+        <table class="board">
+            <colgroup><!-- 각 컬럼에 디자인 적용 -->
+                <col style="width: 10%">
+                <col>
+                <col style="width: 15%">
+                <col style="width: 15%">
+                <col style="width: 10%">
+            </colgroup>
+            <tr><td colspan="5" class="alignrgt">
+                <button type="button">새글쓰기</button></td></tr>
+            <tr><th>번호</th><th>제목</th><th>작성자</th>
+                <th>작성일</th><th>조회</th></tr>
+            <tr><td>1</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>2</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>3</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>4</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>5</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>6</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>7</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>8</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>9</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>10</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>11</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>12</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>13</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>14</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>15</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>16</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>17</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>18</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>19</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+            <tr><td>20</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
+                <td>zzyzzy</td><td>2022-12-10</td><td>123</td></tr>
+        </table>
+
+        <ul class="pagenation"><li class="prev">이전</li>
+            <li class="cpage">1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li>
+            <li>다음</li></ul>
+    </main>

@@ -3,14 +3,14 @@ const router = express.Router();
 const path = require('path');
 
 router.get('/join',(req,res)=> {
-    res.sendFile(path.join(__dirname,'../public','join.html'));
+    res.render('member/join',{title:'회원가입'})
 })
 
 router.get('/login',(req,res)=> {
-    res.sendFile(path.join(__dirname,'../public','login.html'));
+    res.render('member/login',{title:'로그인'})
 })
 router.get('/myinfo',(req,res)=> {
-    res.sendFile(path.join(__dirname,'../public','/myinfo.html'));
+    res.render('member/myinfo',{title:'내정보'})
 })
 
 

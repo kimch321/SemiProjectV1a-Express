@@ -4,6 +4,7 @@
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
+const {engine} = require('express-handlebars');
 
 // 라우팅 모듈 설정
 const indexRouter = require('./routes/index');
@@ -16,6 +17,20 @@ const port = process.env.PORT || 3000;
 
 // 로거 등록
 app.use(logger('dev'))
+
+// view 템플릿 엔진 설정
+app.engine('hbs',engine({
+    extname:'.hbs',
+    defaultLayout:'layout',
+    helpers: {
+        section: function(name, options) {
+            if(!this._sections) this._sections = {}
+            this._sections[name] = options.fn(this)
+            return null
+        },
+    },}))
+app.set('views',path.join(__dirname,'views'));
+app.set('view engine','hbs');
 
 // 라우팅 없이 바로 호출 가능하도록 static 폴더 설정
 app.use(express.static(path.join(__dirname,'static')));
