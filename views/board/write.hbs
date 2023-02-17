@@ -3,6 +3,27 @@
         #writefrm { width: 560px; }
     </style>
 {{/section}}
+{{#section 'script'}}
+    <script>
+        function processWrite () {
+            let writefrm = document.write; // 이자리는 폼의 이름이 온다.
+            console.log(writefrm);
+            if (writefrm.title.value === '') alert('제목을 입력하세요');
+            else if (writefrm.contents.value === '') alert('본문을 입력하세요')
+            else {
+                writefrm.method = 'post';
+                writefrm.enctype = 'application/x-www-form-urlencoded';
+                writefrm.submit();
+            }
+        }
+
+        let submitbtn = document.querySelector('#submitbtn');
+        submitbtn.addEventListener('click',processWrite);
+        let title = document.querySelector('#title');
+        let uid = document.querySelector('#uid');
+        let contents = document.querySelector('#contents');
+    </script>
+{{/section}}
     <main>
         <div id="main">
             <h2>게시판 새글쓰기</h2>
@@ -19,7 +40,7 @@
                               rows="7" cols="55"></textarea></div>
 
                 <div><label></label>
-                    <button type="button">입력완료</button>
+                    <button type="button" id="submitbtn">입력완료</button>
                     <button type="reset">다시입력</button>
                 </div>
             </form>

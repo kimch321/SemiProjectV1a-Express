@@ -5,6 +5,13 @@ const path = require('path');
 router.get('/write',(req,res)=> {
     res.render('board/write',{title : '새 글쓰기'})
 })
+
+router.post('/write',(req,res)=> {
+    console.log(req.body);
+
+    res.redirect(303,'/board/list');
+})
+
 router.get('/list',(req,res)=> {
     res.render('board/list',{title : '게시판 목록'})
 })

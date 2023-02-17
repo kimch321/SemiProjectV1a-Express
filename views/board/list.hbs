@@ -19,6 +19,14 @@
         .prev { color: #cccccc }
     </style>
 {{/section}}
+{{#section 'script'}}
+    <script>
+        let write = document.querySelector('#write');
+        write.addEventListener('click', function() {
+            window.location.href = "/board/write";
+        })
+    </script>
+{{/section}}
     <main>
         <h2>게시판</h2>
         <table class="board">
@@ -30,7 +38,7 @@
                 <col style="width: 10%">
             </colgroup>
             <tr><td colspan="5" class="alignrgt">
-                <button type="button">새글쓰기</button></td></tr>
+                <button type="button" id="write">새글쓰기</button></td></tr>
             <tr><th>번호</th><th>제목</th><th>작성자</th>
                 <th>작성일</th><th>조회</th></tr>
             <tr><td>1</td><td>시간은 금이라구, 친구!, 진짜라구, 친구, 정말이라구, 친구, 사실이라구, 친구!</td>
