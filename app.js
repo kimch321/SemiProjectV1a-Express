@@ -5,6 +5,8 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const {engine} = require('express-handlebars');
+const bodyParser = require('body-parser');
+const oracle = require('./models/Oracle')
 
 // 라우팅 모듈 설정
 const indexRouter = require('./routes/index');
@@ -15,8 +17,12 @@ const boardRouter = require('./routes/board');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// 로거 등록
+// 미들웨어 등록 및 설정
 app.use(logger('dev'))
+app.use(express.json());
+app.use(express.urlencoded({extended:false}));
+app.use(bodyParser.json());
+oracle.initConn();
 
 // view 템플릿 엔진 설정
 app.engine('hbs',engine({
