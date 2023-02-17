@@ -12,26 +12,24 @@
     <main>
         <h2>게시판 본문</h2>
         <div id="view">
+            {{#views}}
             <div><label>제목</label>
-                <span>시간은 금이라구,친구! 진짜라구, 친구! 정말이라구친구!
-          참말이라구, 친구!</span></div>
+                <span>{{title}}</span></div>
 
             <div><label>작성자</label>
-                <span>siestageek</span></div>
+                <span>{{uid}}</span></div>
 
             <div><label>작성일</label>
-                <span>2014-05-05 12:45:05(777)</span></div>
+                <span>{{regdate}}({{views}})</span></div>
 
             <div><label class="drgup">본 문</label>
-                <span id="contents">시간은 금이라구,친구! 진짜라구, 친구! 정말이라구친구! 참말이라구,
-        친구!시간은 금이라구,친구! 진짜라구, 친구! 정말이라구친구! 참말이
-        라구, 친구시간은 금이라구,친구! 진짜라구, 친구! 정말이라구친구!
-        참말이라구, 친구!시간은 금이라구,친구! 진짜라구, 친구! 정말이라
-        구친구! 참말이라구, 친구!</span></div>
+                <span id="contents">{{contents}}</span></div>
 
-            <div><label></label>
+            <div>
+            {{/views}}
+                <label></label>
                 <button type="button"
-                        onclick="location.href='write.html'">새글쓰기</button>
+                        onclick="location.href='write'">새글쓰기</button>
                 <button type="button">목록으로</button>
                 <button type="button">수정하기</button>
                 <button type="button">삭제하기</button>
