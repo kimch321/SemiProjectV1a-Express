@@ -50,17 +50,21 @@ class Board {
 
     async select () {
         let conn;
-        let result;
         let params = [];
         let board=[]
-        //selectSql : `select BNO,TITLE,USERID,to_char(REGDATE,'YYYY-MM-DD') regdate,VIEWS FROM BOARD ORDER BY BNO DESC`,
 
         try {
             conn = await oracledb.makeConn();
+            let result = await conn.execute(boardSql.selectCount, params, this.options);
+            let rs = result.resultSet;
+            let idx = -1, row = null;
+            if ((row = await rs.getRow())){
+                idx = row
+            } // 총 게시글 수
 
             result = await conn.execute(boardSql.selectSql,params,this.options);
-            let rs = await result.resultSet;
-            let row;
+            rs = await result.resultSet;
+            row = null;
             while((row = await rs.getRow())) {
                 // clob 데이터타입을 가져오는 방법
                 const clobTitle = row[1];
@@ -70,8 +74,8 @@ class Board {
                     title += chunk;
                 });
                 await new Promise(resolve => clobTitle.on("end", resolve));
-
                 let a = new Board(row[0],title,row[2],row[3],'',row[4])
+                a.idx = idx--
                 board.push(a);
             }
         } catch(e) {
@@ -89,17 +93,9 @@ class Board {
 
         try {
             conn = await oracledb.makeConn();
-//selectOneSql : `select TITLE,USERID,to_char(REGDATE,'YYYY-MM-DD HH:MI:SS') regdate,CONTENTS,VIEWS FROM BOARD WHERE BNO = :1`
-            //    constructor(bno, title, userid, regdate, contents, views) {
-            //         this.bno = bno;
-            //         this.title = title;
-            //         this.userid = userid;
-            //         this.regdate = regdate;
-            //         this.contents = contents;
-            //         this.views = views;
-            //     }
+
             let result = await conn.execute(boardSql.selectOneSql,params,this.options);
-            // console.log(result);
+
             let rs = await result.resultSet;
 
             let row;
@@ -163,12 +159,10 @@ class Board {
         let params = [bno];
         console.log('params?',params)
         let deletecnt = 0;
-        // delete: ' delete from BOARD where BNO = '31''
         try {
             conn = await oracledb.makeConn();
             let result = await conn.execute(boardSql.delete,params)
             await conn.commit();
-            console.log(result.rowsAffected);
             if (result.rowsAffected>0) {
                deletecnt = result.rowsAffected;
             }
@@ -177,7 +171,6 @@ class Board {
         } finally {
             await oracledb.clossConn();
         }
-        console.log('deletecnt?',deletecnt)
         return deletecnt;
     }
 }
