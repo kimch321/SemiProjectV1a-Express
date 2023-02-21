@@ -15,12 +15,12 @@
     <main>
         <h2>게시판 본문</h2>
         <div id="view">
-            {{#bno}}
+            {{#bds}}
             <div><label>제목</label>
                 <span>{{title}}</span></div>
 
             <div><label>작성자</label>
-                <span>{{uid}}</span></div>
+                <span>{{userid}}</span></div>
 
             <div><label>작성일</label>
                 <span>{{regdate}}({{views}})</span></div>
@@ -31,14 +31,14 @@
                 <input type="hidden" id="bno" value="{{bno}}">
                 <input type="hidden" id="uid" value="{{userid}}">
             <div>
-            {{/bno}}
+            {{/bds}}
                 <label></label>
                 {{#if session.userid}}
                     <button type="button"
                             onclick="location.href='/board/write'">새글쓰기</button>
                 {{/if}}
                 <button type="button" onclick="location.href='/board/list'">목록으로</button>
-                {{#if (eq session.userid bno.[0].uid)}}
+                {{#if (eq session.userid bds.[0].userid)}}
 <!--                    session.userid는 로그인한 사용자의 ID이며 bds. bds.[0].userid은 게시물을 작성한 사용자의 ID-->
                     <button type="button" id="updatebtn">수정하기</button>
                     <button type="button" id="deletebtn">삭제하기</button>

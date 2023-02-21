@@ -27,7 +27,7 @@ router.post('/write',async (req,res)=> {
 
 router.get('/list',async (req,res)=> {
     let board = new Board().select().then(async (result) => {return await result});
-    console.log(await board)
+    // console.log(await board)
 
     res.render('board/list',{title : '게시판 목록',board: await board})
 })
@@ -35,13 +35,15 @@ router.get('/view',async (req,res)=> {
     let bno = req.query.bno
     // console.log(bno);
     let bds = new Board().selectOne(bno).then(async (result) => {return result});
-    console.log(await bds)
-    res.render('board/view',{title : '게시판 본문보기', views: await bds});
+    // console.log('bds는?',await bds)
+    res.render('board/view',{title : '게시판 본문보기', bds: await bds});
 });
 
 router.get('/delete',async (req,res) => {
     let {bno, uid} = req.query;
     let suid =req.session.userid;
+
+    // console.log('bno',bno,'uid',uid,'suid',suid)
     if (suid && uid &&(suid == uid)) {
         new Board().delete(bno).then(cnt => cnt);
     }

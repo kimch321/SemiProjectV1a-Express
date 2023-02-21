@@ -10,7 +10,7 @@ let boardSql = {
     selectOneSql : `select TITLE,USERID,to_char(REGDATE,'YYYY-MM-DD HH:MI:SS') regdate,CONTENTS,VIEWS FROM BOARD WHERE BNO = :1`,
     viewOne: ' update BOARD set VIEWS = VIEWS + 1 where BNO = :1 ',
     update: ' update BOARD set TITLE = :1, contents = :2, regdate = current_timestamp where bno = :3',
-    delete: ' delete from BOARD where BNO = :1 ',
+    delete: 'delete from BOARD where BNO = :1'
 }
 
 class Board {
@@ -62,8 +62,6 @@ class Board {
             let rs = await result.resultSet;
             let row;
             while((row = await rs.getRow())) {
-                console.log(row[4]);
-
                 // clob 데이터타입을 가져오는 방법
                 const clobTitle = row[1];
                 let title = "";
@@ -125,7 +123,7 @@ class Board {
                 });
                 await new Promise(resolve => clobContents.on("end", resolve));
 
-                let view = new Board('',title,row[1],row[2],contents,row[4])
+                let view = new Board(bno,title,row[1],row[2],contents,row[4])
                 views.push(view);
             }
 
@@ -163,12 +161,14 @@ class Board {
     async delete(bno) {
         let conn = null;
         let params = [bno];
+        console.log('params?',params)
         let deletecnt = 0;
-
+        // delete: ' delete from BOARD where BNO = '31''
         try {
             conn = await oracledb.makeConn();
             let result = await conn.execute(boardSql.delete,params)
-            await conn.commit;
+            await conn.commit();
+            console.log(result.rowsAffected);
             if (result.rowsAffected>0) {
                deletecnt = result.rowsAffected;
             }
@@ -177,7 +177,7 @@ class Board {
         } finally {
             await oracledb.clossConn();
         }
-
+        console.log('deletecnt?',deletecnt)
         return deletecnt;
     }
 }
