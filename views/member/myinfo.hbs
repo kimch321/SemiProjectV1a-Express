@@ -11,9 +11,11 @@
     <main>
         <h2>회원정보</h2>
         <table class="myinfo">
-            <tr><td>아이디</td><td>zzyzzy</td></tr>
-            <tr><td>이름</td><td>홍길동</td></tr>
-            <tr><td>이메일</td><td>abc123@987xyz.co.kr</td></tr>
-            <tr><td>가입일</td><td>2022-12-19 12:17:36</td></tr>
+            {{#mb}}
+            <tr><td>아이디</td><td>{{uid}}</td></tr>
+            <tr><td>이름</td><td>{{name}}</td></tr>
+            <tr><td>이메일</td><td>{{email}}</td></tr>
+            <tr><td>가입일</td><td>{{regdate}}</td></tr>
+            {{/mb}}
         </table>
     </main>

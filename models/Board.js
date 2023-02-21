@@ -1,13 +1,20 @@
 const oracledb = require('../models/Oracle')
 
-class Write {
+let boardSql = {
+    insertSql : 'insert into BOARD(BNO,TITLE,USERID,CONTENTS) VALUES(BNO.nextval,:1,:2,:3)',
+    selectSql : `select BNO,TITLE,USERID,to_char(REGDATE,'YYYY-MM-DD') regdate,VIEWS FROM BOARD ORDER BY BNO DESC`,
+    selectOneSql : `select TITLE,USERID,to_char(REGDATE,'YYYY-MM-DD HH:MI:SS') regdate,CONTENTS,VIEWS FROM BOARD WHERE BNO = :1`,
+    viewOne: ' update BOARD set VIEWS = VIEWS + 1 where BNO = :1 ',
+    update: ' update BOARD set TITLE = :1, contents = :2 where bno = :3 ',
+    delete: ' delete from BOARD where BNO = :1 ',
+}
+
+class Board {
     options = {
         resultSet: true,
         outFormat: oracledb.OUT_FORMAT_OBJECT
     };
-    insertSql = `insert into BOARD(BNO,TITLE,USERID,CONTENTS) VALUES(BNO.nextval,:1,:2,:3)`
-    selectSql = `select BNO,TITLE,USERID,to_char(REGDATE,'YYYY-MM-DD') regdate,VIEWS FROM BOARD ORDER BY BNO DESC`
-    selectOneSql = `select TITLE,USERID,to_char(REGDATE,'YYYY-MM-DD HH:MI:SS') regdate,CONTENTS,VIEWS FROM BOARD WHERE BNO = :1`
+
     constructor(title, uid, contents) {
         this.title = title;
         this.uid = uid;
@@ -17,21 +24,21 @@ class Write {
     async insert () {
         let conn;
         let params = [this.title, this.uid, this.contents]
-
+        let insercnt = 0;
         try {
             conn = await oracledb.makeConn();
 
-            let result = await conn.execute(this.insertSql,params);
+            let result = await conn.execute(boardSql.insertSql,params);
             await conn.commit();
             if (result.rowsAffected>0) {
-                console.log('게시글 저장 성공')
+                insercnt = result.rowsAffected;
             }
         } catch(e) {
-            console.log('e')
+            console.log(e)
         } finally {
             await oracledb.clossConn(conn);
         }
-
+        return insercnt
     }
 
     async select () {
@@ -42,7 +49,7 @@ class Write {
         try {
             conn = await oracledb.makeConn();
 
-            result = await conn.execute(this.selectSql,[],this.options);
+            result = await conn.execute(boardSql.selectSql,[],this.options);
             let rs = await result.resultSet;
             let row;
             while((row = await rs.getRow())) {
@@ -56,12 +63,12 @@ class Write {
                 });
                 await new Promise(resolve => clobTitle.on("end", resolve));
 
-                let write = new Write(title,row[2])
-                write.bno = row[0];
-                write.regdate = row[3];
-                write.views = row[4];
-                // console.log(write);
-                board.push(write);
+                let a = new Board(title,row[2])
+                a.bno = row[0];
+                a.regdate = row[3];
+                a.views = row[4];
+                // console.log(Board);
+                board.push(a);
             }
         } catch(e) {
             console.log(e)
@@ -73,15 +80,16 @@ class Write {
 
     async selectOne (bno) {
         let conn;
-        let result;
+        let params = [bno]
         let views = [];
 
         try {
             conn = await oracledb.makeConn();
 
-            result = await conn.execute(this.selectOneSql,[bno],this.options);
+            let result = await conn.execute(boardSql.selectOneSql,params,this.options);
             // console.log(result);
             let rs = await result.resultSet;
+
             let row;
             while((row = await rs.getRow())) {
 
@@ -103,20 +111,23 @@ class Write {
                 });
                 await new Promise(resolve => clobContents.on("end", resolve));
 
-                let view = new Write(title,row[1],contents)
+                let view = new Board(title,row[1],contents)
                 view.regdate = row[2];
                 view.views = row[4];
-                // console.log(write);
+                // console.log(Board);
                 views.push(view);
             }
+
+            await conn.execute(boardSql.viewOne, params);
+            await conn.commit();
         } catch(e) {
             console.log(e)
         } finally {
             await oracledb.clossConn(conn);
         }
-        return await views;
+        return views;
 
     }
 }
 
-module.exports = Write;
+module.exports = Board;
