@@ -22,8 +22,11 @@
 {{#section 'script'}}
     <script>
         let write = document.querySelector('#write');
-        write.addEventListener('click', function() {
-            window.location.href = "/board/write";
+        // optional chaining (?.)
+        // ? 앞의 객체변수가 null 이거나 undefined 라면
+        // . 뒤의 코드를 실행하지 않음
+        write?.addEventListener('click', function() {
+            location.href = "/board/write";
         })
     </script>
 {{/section}}

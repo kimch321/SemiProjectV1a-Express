@@ -1,22 +1,4 @@
 //진입점 파일
-//
-// 회원테이블 board
-// bno, title, userid, regdate, views, contents
-//
-// 조건 : 조회수는 기본값 0 으로 셋팅
-//
-// 시퀀스 bno
-//
-// 1. 게시판 테이블 만들기 *
-// 2. 새글 쓰기 이동하게 하기
-// /board/write
-
-// 3. 입력값 db로 전송하기 *
-//
-// 4. 게시판 글 클릭하면 게시글 확인 페이지로 이동하게 하기 *
-//
-//
-
 
 // express 모듈과 기타 미들웨어 모듈 사용 선언
 const express = require('express');
@@ -42,12 +24,13 @@ const port = process.env.PORT || 3000;
 // view 템플릿 엔진 설정
 app.engine('hbs', engine({
     extname: '.hbs', defaultLayout: 'layout',
-    helpers: {
-        section: function(name, options) {
-            if(!this._sections) this._sections = {}
-            this._sections[name] = options.fn(this)
-            return null
-        }, },
+    // helpers: {
+    //     section: function(name, options) {
+    //         if(!this._sections) this._sections = {}
+    //         this._sections[name] = options.fn(this)
+    //         return null
+    //     }, },
+    helpers: require('./helpers/handlebars-helper'),
 }));
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','hbs');
