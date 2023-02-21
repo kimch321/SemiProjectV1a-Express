@@ -8,8 +8,8 @@ let boardSql = {
     selectCount :'select count(bno) cnt from board',
 
     selectOneSql : `select TITLE,USERID,to_char(REGDATE,'YYYY-MM-DD HH:MI:SS') regdate,CONTENTS,VIEWS FROM BOARD WHERE BNO = :1`,
-    viewOne: ' update BOARD set VIEWS = VIEWS + 1 where BNO = :1 ',
-    update: ' update BOARD set TITLE = :1, contents = :2, regdate = current_timestamp where bno = :3',
+    viewOne: 'update BOARD set VIEWS = VIEWS + 1 where BNO = :1 ',
+    update: 'update BOARD set TITLE = :1, contents = :2, regdate = current_timestamp where bno = :3',
     delete: 'delete from BOARD where BNO = :1'
 }
 
@@ -145,7 +145,7 @@ class Board {
         try {
             conn = await oracledb.makeConn();
             let result = await conn.execute(boardSql.update,params)
-            await conn.commit;
+            await conn.commit();
             if (result.rowsAffected>0) {
                 updatecnt = result.rowsAffected;
             }

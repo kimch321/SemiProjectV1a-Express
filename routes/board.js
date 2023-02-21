@@ -54,6 +54,7 @@ router.get('/delete',async (req,res) => {
 router.get('/update',async (req, res) => {
     let {bno, uid} = req.query;
     let suid = req.session.userid;
+    console.log('uid?',uid,'suid?',suid,'bno',bno);
 
     if (uid && suid && (uid == suid)) {
         let bds = new Board().selectOne(bno).then(bds => bds);
@@ -69,7 +70,7 @@ router.post('/update',(req,res)=>{
     let suid = req.session.userid;
 
     if (uid && suid && (uid == suid)) {
-        let bds = new Board(bno,title, uid, 0,contents, 0).update().then(cnt =>cnt);
+        new Board(bno,title, uid, 0,contents, 0).update().then(cnt =>cnt);
         res.redirect(303, `/board/view?bno=${bno}`);
     } else {
         res.redirect(303, '/board/list');
