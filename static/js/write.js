@@ -1,15 +1,16 @@
 let frm = document.write; // 이 자리는 폼의 이름이 온다.
-let bno = document.querySelector('#bno').value;
+// let bno = document.querySelector('#bno').value;
 function processWrite () {
     if (frm.title.value === '') alert('제목을 입력하세요');
     else if (frm.contents.value === '') alert('본문을 입력하세요')
     else if (frm.uid.value!== ''){
-    frm.method = 'post';
-    frm.submit();
+        frm.method = 'post';
+        frm.submit();
     }
 }
-    let writebtn = document.querySelector('#writebtn');
-    writebtn.addEventListener('click', processWrite);
+
+let writebtn = document.querySelector('#writebtn');
+writebtn.addEventListener('click',processWrite);
 
 // function processDelete() {
 //     if (confirm('정말로 삭제하시겠습니까?'))

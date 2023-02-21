@@ -4,30 +4,11 @@
     <meta charset="UTF-8">
     <title>write</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/project2.css">
+
     <style>
         #writefrm { width: 560px; }
     </style>
-    <script>
-        let frm = document.write; // 이 자리는 폼의 이름이 온다.
-        // let bno = document.querySelector('#bno').value;
-        // function processWrite () {
-        //     if (frm.title.value === '') alert('제목을 입력하세요');
-        //     else if (frm.contents.value === '') alert('본문을 입력하세요')
-        //     else if (frm.uid.value!== ''){
-        //         frm.method = 'post';
-        //         frm.submit();
-        //     }
-        // }
-        function funny () {
-            console.log('hello world');
-        }
-        let writebtn = document.querySelector('#writebtn');
-        console.log(writebtn)
-        //writebtn.addEventListener('click',funny);
-    </script>
+
 </head>
 <body>
 <div id="wrapper">
@@ -69,5 +50,20 @@
         <div class="copy">copyright &copy; 2023. zzyzzy. All Rights Reserved.</div>
     </footer>
 </div>
+<script>
+    let frm = document.write; // 이 자리는 폼의 이름이 온다.
+    // let bno = document.querySelector('#bno').value;
+    function processWrite () {
+        if (frm.title.value === '') alert('제목을 입력하세요');
+        else if (frm.contents.value === '') alert('본문을 입력하세요')
+        else if (frm.uid.value!== ''){
+            frm.method = 'post';
+            frm.submit();
+        }
+    }
+
+    let writebtn = document.querySelector('#writebtn');
+    writebtn.addEventListener('click',processWrite);
+</script>
 </body>
 </html>
