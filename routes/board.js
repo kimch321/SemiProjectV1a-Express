@@ -6,21 +6,19 @@ const Board = require('../models/Board')
 const session = require("express-session");
 
 router.get('/write',(req,res)=> {
-    if (req.session.userid) {
-        res.render('board/write',{title : '새 글쓰기'})
-    } else{
+    if (!req.session.userid) {
         res.redirect(303,'/member/login');
+
+    } else{
+        res.render('board/write',{title : '새 글쓰기'})
     }
 })
 
 router.post('/write',async (req,res)=> {
     let viewName = '/board/failWrite';
     let {title, uid, contents} = req.body
-    // console.log(title, uid, contents);
 
-    // 문제 insert작업이 끝나기 전에 redirect 되고 있다.;;;
-    // 해결함.
-    let rowcnt = new Board(title, uid, contents)
+    let rowcnt = new Board(null,title,uid,null,contents,null)
         .insert().then((result) => result);
     if (await rowcnt > 0) viewName = '/board/list'
 
@@ -29,23 +27,24 @@ router.post('/write',async (req,res)=> {
 
 router.get('/list',async (req,res)=> {
     let board = new Board().select().then(async (result) => {return await result});
-    // console.log(await board)
+    console.log(await board)
 
     res.render('board/list',{title : '게시판 목록',board: await board})
 })
 router.get('/view',async (req,res)=> {
     let bno = req.query.bno
     // console.log(bno);
-    let views = new Board().selectOne(bno).then(async (result) => {return result});
-    console.log(await views)
-    res.render('board/view',{title : '게시판 본문보기', views: await views});
+    let bds = new Board().selectOne(bno).then(async (result) => {return result});
+    console.log(await bds)
+    res.render('board/view',{title : '게시판 본문보기', views: await bds});
 });
 
 router.get('/delete',async (req,res) => {
-    let bno = req.query.bno;
-    console.log(bno);
-
-    let cnt = new Board().delete(bno).then(cnt => cnt);
+    let {bno, uid} = req.query;
+    let suid =req.session.userid;
+    if (suid && uid &&(suid == uid)) {
+        new Board().delete(bno).then(cnt => cnt);
+    }
 
     res.redirect(303, '/board/list')
 });

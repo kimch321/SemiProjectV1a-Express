@@ -3,29 +3,29 @@
         #writefrm { width: 560px; }
     </style>
 {{/section}}
+<main>
+    <div id="main">
+        <h2>게시판 새글쓰기</h2>
+        <form name="write" id="writefrm">
+            <div><label for="title">제목</label>
+                <input type="text" name="title" id="title"></div>
+
+            <div><label for="uid">작성자</label>
+                <input type="text" name="uid" id="uid"
+                       value="{{ session.userid }}" readonly></div>
+
+            <div><label for="contents" class="drgup">본문</label>
+                <textarea name="contents" id="contents"
+                          rows="7" cols="55"></textarea></div>
+
+            <div><label></label>
+                <button type="button" id="writebtn">입력완료</button>
+                <button type="reset">다시입력</button>
+            </div>
+        </form>
+    </div>
+</main>
 {{#section 'script'}}
     <script src="/js/write.js">
     </script>
 {{/section}}
-    <main>
-        <div id="main">
-            <h2>게시판 새글쓰기</h2>
-            <form name="write" id="writefrm">
-                <div><label for="title">제목</label>
-                    <input type="text" name="title" id="title"></div>
-
-                <div><label for="uid">작성자</label>
-                    <input type="text" name="uid" id="uid"
-                           value="{{session.userid}}" readonly></div>
-
-                <div><label for="contents" class="drgup">본문</label>
-                    <textarea name="contents" id="contents"
-                              rows="7" cols="55"></textarea></div>
-
-                <div><label></label>
-                    <button type="button" id="writebtn">입력완료</button>
-                    <button type="reset">다시입력</button>
-                </div>
-            </form>
-        </div>
-    </main>

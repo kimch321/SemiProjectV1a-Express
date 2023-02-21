@@ -10,6 +10,24 @@
     <style>
         #writefrm { width: 560px; }
     </style>
+    <script>
+        let frm = document.write; // 이 자리는 폼의 이름이 온다.
+        // let bno = document.querySelector('#bno').value;
+        // function processWrite () {
+        //     if (frm.title.value === '') alert('제목을 입력하세요');
+        //     else if (frm.contents.value === '') alert('본문을 입력하세요')
+        //     else if (frm.uid.value!== ''){
+        //         frm.method = 'post';
+        //         frm.submit();
+        //     }
+        // }
+        function funny () {
+            console.log('hello world');
+        }
+        let writebtn = document.querySelector('#writebtn');
+        console.log(writebtn)
+        //writebtn.addEventListener('click',funny);
+    </script>
 </head>
 <body>
 <div id="wrapper">
@@ -40,7 +58,7 @@
                               rows="7" cols="55"></textarea></div>
 
                 <div><label></label>
-                    <button type="button">입력완료</button>
+                    <button type="button" id="writebtn">입력완료</button>
                     <button type="reset">다시입력</button>
                 </div>
             </form>

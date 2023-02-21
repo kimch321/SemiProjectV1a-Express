@@ -30,36 +30,39 @@ class Board {
 
     async insert () {
         let conn;
-        let params = [this.title, this.uid, this.contents]
-        let insercnt = 0;
+        let params = [this.title, this.userid, this.contents]
+        let inserCnt = 0;
         try {
             conn = await oracledb.makeConn();
 
             let result = await conn.execute(boardSql.insertSql,params);
             await conn.commit();
             if (result.rowsAffected>0) {
-                insercnt = result.rowsAffected;
+                inserCnt = result.rowsAffected;
             }
         } catch(e) {
             console.log(e)
         } finally {
             await oracledb.clossConn(conn);
         }
-        return insercnt
+        return inserCnt
     }
 
     async select () {
         let conn;
         let result;
-        let board = [];
+        let params = [];
+        let board=[]
+        //selectSql : `select BNO,TITLE,USERID,to_char(REGDATE,'YYYY-MM-DD') regdate,VIEWS FROM BOARD ORDER BY BNO DESC`,
 
         try {
             conn = await oracledb.makeConn();
 
-            result = await conn.execute(boardSql.selectSql,[],this.options);
+            result = await conn.execute(boardSql.selectSql,params,this.options);
             let rs = await result.resultSet;
             let row;
             while((row = await rs.getRow())) {
+                console.log(row[4]);
 
                 // clob 데이터타입을 가져오는 방법
                 const clobTitle = row[1];
@@ -70,11 +73,7 @@ class Board {
                 });
                 await new Promise(resolve => clobTitle.on("end", resolve));
 
-                let a = new Board(title,row[2])
-                a.bno = row[0];
-                a.regdate = row[3];
-                a.views = row[4];
-                // console.log(Board);
+                let a = new Board(row[0],title,row[2],row[3],'',row[4])
                 board.push(a);
             }
         } catch(e) {
@@ -92,7 +91,15 @@ class Board {
 
         try {
             conn = await oracledb.makeConn();
-
+//selectOneSql : `select TITLE,USERID,to_char(REGDATE,'YYYY-MM-DD HH:MI:SS') regdate,CONTENTS,VIEWS FROM BOARD WHERE BNO = :1`
+            //    constructor(bno, title, userid, regdate, contents, views) {
+            //         this.bno = bno;
+            //         this.title = title;
+            //         this.userid = userid;
+            //         this.regdate = regdate;
+            //         this.contents = contents;
+            //         this.views = views;
+            //     }
             let result = await conn.execute(boardSql.selectOneSql,params,this.options);
             // console.log(result);
             let rs = await result.resultSet;
@@ -118,9 +125,7 @@ class Board {
                 });
                 await new Promise(resolve => clobContents.on("end", resolve));
 
-                let view = new Board(title,row[1],contents)
-                view.regdate = row[2];
-                view.views = row[4];
+                let view = new Board('',title,row[1],row[2],contents,row[4])
                 views.push(view);
             }
 
@@ -158,14 +163,14 @@ class Board {
     async delete(bno) {
         let conn = null;
         let params = [bno];
-        let insertcnt = 0;
+        let deletecnt = 0;
 
         try {
             conn = await oracledb.makeConn();
             let result = await conn.execute(boardSql.delete,params)
             await conn.commit;
             if (result.rowsAffected>0) {
-                insertcnt = result.rowsAffected;
+               deletecnt = result.rowsAffected;
             }
         } catch (e) {
             console.log(e);
@@ -173,7 +178,7 @@ class Board {
             await oracledb.clossConn();
         }
 
-        return insertcnt;
+        return deletecnt;
     }
 }
 
