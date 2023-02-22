@@ -45,7 +45,7 @@ router.get('/delete',async (req,res) => {
 
     // console.log('bno',bno,'uid',uid,'suid',suid)
     if (suid && uid &&(suid == uid)) {
-        new Board().delete(bno).then(cnt => cnt);
+        await new Board().delete(bno).then(cnt => cnt);
     }
 
     res.redirect(303, '/board/list')
