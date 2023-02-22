@@ -3,32 +3,37 @@ const router = express.Router();
 const Zipcode = require('../models/Zipcode');
 
 router.get('/', async (req,res)=>{
-    let sido = req.query.sido;
-    let gugun = req.query.gugun;
-    let dong = req.query.dong;
-
-    let [guguns, dongs, zips] = [null,null,null]
-
-    let sidos = new Zipcode().getSido().then(sido => sido);
-    //console.log(await sidos);
-
-    if (sido !== undefined)     // 시군구 검색
-        guguns = new Zipcode().getGugun(sido).then(gugun => gugun);
-    // console.log(await guguns);
-
-    if (sido !== undefined && gugun !== undefined)      // 읍면동 검색
-        dongs = new Zipcode().getDong(sido,gugun).then(dong => dong);
-    // console.log(await dongs);
-
-    if (sido !== undefined && gugun !== undefined && dong !== undefined)    // zipcode 검색
-    zips = new Zipcode().getZipcode(sido,gugun,dong).then(zipcode=>zipcode);
-    // console.log(await zips);
-
-    res.render('zipcode',{title:'시군구동 찾기', sidos: await sidos, guguns: await guguns, dongs: await dongs, zips: await zips,
-        sido : sido, gugun : gugun, dong : dong})
-
-    // 서버사이드 랜더링의 단점은, 만약 동을 검색해야 한다면 시도와 시군구를 다시 검색해서 보여주게 된다. 이 경우엔 어쩔 방법은 없다.
+    res.render('zipcode2',{title:'시군구동 찾기 v2'})
 });
 
+router.get('/sido', async (req,res)=>{
+    let sidos = new Zipcode().getSido().then(sido => sido);
+    res.send(JSON.stringify(await sidos)) // 조회결과를 JSON으로 전송
+});
+// path variable
+// REST API에서 사용하는 방식으로 경로를 변수로 사용하는 기법
+// express 프레임워크에서 /:변수명 형식으로 사용함
+// 변수값을 가져오려면 req.params. 변수명을 사용함
+
+router.get('/gugun/:sido', async (req,res)=>{
+    let sido = req.params.sido;
+    let guguns = new Zipcode().getGugun(sido).then(gugun => gugun);
+
+    res.send(JSON.stringify(await guguns)) // 조회결과를 JSON으로 전송
+});
+
+router.get('/dong/:sido/:gugun', async (req,res)=>{
+    let {sido,gugun} = req.params;
+    let dongs = new Zipcode().getDong(sido,gugun).then(dong => dong);
+
+    res.send(JSON.stringify(await dongs)) // 조회결과를 JSON으로 전송
+});
+
+router.get('/zip/:sido/:gugun/:dong', async (req,res)=>{
+    let {sido,gugun,dong} = req.params;
+    let zips = new Zipcode().getZipcode(sido,gugun,dong).then(zips => zips);
+
+    res.send(JSON.stringify(await zips)) // 조회결과를 JSON으로 전송
+});
 
 module.exports = router;
