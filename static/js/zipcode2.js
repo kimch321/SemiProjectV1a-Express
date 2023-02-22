@@ -85,3 +85,5 @@ getSido();
 sido.addEventListener('change',getGugun);
 gugun.addEventListener('change',getDong);
 dong.addEventListener('change',getZip);
+
+// 클라이언트 사이드 렌더링은 서버 부하를 줄여주지만 검색엔진에 노출되기 어렵다는 단점이 있다.
