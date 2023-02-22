@@ -79,7 +79,7 @@ class Zipcode {
     async getZipcode(sido,gugun,dong) {
         let conn = null;
         let params = [sido,gugun,dong];
-        let zipcodes = [];
+        let zips = [];
 
         try {
             conn = await oracledb.makeConn();
@@ -89,7 +89,7 @@ class Zipcode {
             let row;
             while((row = await rs.getRow())) {
                 let zip = {'zipcode': row.ZIPCODE,'sido':row.SIDO,'gugun':row.GUGUN,'dong':row.DONG, 'ri':row.RI, 'bunji':row.BUNJI};
-                zipcodes.push(zip);
+                zips.push(zip);
             }
 
         } catch (e) {
@@ -97,7 +97,7 @@ class Zipcode {
         } finally {
             await oracledb.clossConn(conn)
         }
-        return zipcodes
+        return zips
     };
 }
 
