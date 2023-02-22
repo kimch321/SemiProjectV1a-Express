@@ -65,7 +65,6 @@ app.use(function(req, res, next){
     next();
 });
 
-
 // 라우팅 모듈 등록 - 클라이언트 요청 처리 핵심 파트
 app.use('/',indexRouter);
 app.use('/member',memberRouter);
