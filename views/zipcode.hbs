@@ -4,7 +4,10 @@
         let url = '?sido=' + sido.value;
         location.href = url;
     };
-    const getDong = () => {};
+    const getDong = () => {
+        let url = '?sido=' + sido.value+'&gugun='+gugun.value;
+        location.href = url;
+    };
 
     let sido = document.querySelector('#sido');
     let gugun = document.querySelector('#gugun');
@@ -12,10 +15,20 @@
 
     sido.addEventListener('change',getGugun);
     gugun.addEventListener('change',getDong);
+    dong.addEventListener('change',)
 </script>
 <script>
     {{#if sido}}
     document.querySelector('#sido').value= '{{sido}}';
+    {{/if}}
+    {{#if gugun}}
+    document.querySelector('#sido').value= '{{sido}}';
+    document.querySelector('#gugun').value= '{{gugun}}';
+    {{/if}}
+    {{#if dong}}
+    document.querySelector('#sido').value= '{{sido}}';
+    document.querySelector('#gugun').value= '{{gugun}}';
+    document.querySelector('#dong').value= '{{dong}}';
     {{/if}}
 </script>
 {{/section}}
