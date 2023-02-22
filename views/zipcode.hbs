@@ -1,4 +1,24 @@
+{{#section 'script'}}
+<script>
+    const getGugun = () => {
+        let url = '?sido=' + sido.value;
+        location.href = url;
+    };
+    const getDong = () => {};
 
+    let sido = document.querySelector('#sido');
+    let gugun = document.querySelector('#gugun');
+    let dong = document.querySelector('#dong');
+
+    sido.addEventListener('change',getGugun);
+    gugun.addEventListener('change',getDong);
+</script>
+<script>
+    {{#if sido}}
+    document.querySelector('#sido').value= '{{sido}}';
+    {{/if}}
+</script>
+{{/section}}
 <main>
     <h1>시군구동 찾기</h1>
     <div>
