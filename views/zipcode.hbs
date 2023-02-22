@@ -4,12 +4,21 @@
     <div>
         <select name="sido" id="sido">
             <option>-- 시도 --</option>
+            {{#sidos}}
+                <option>{{sido}}</option>
+            {{/sidos}}
         </select>
         <select name="gugun" id="gugun">
             <option>-- 시군구 --</option>
+            {{#guguns}}
+                <option>{{gugun}}</option>
+            {{/guguns}}
         </select>
         <select name="dong" id="dong">
             <option>-- 읍면동 --</option>
+            {{#dongs}}
+                <option>{{dong}}</option>
+            {{/dongs}}
         </select>
     </div>
 

@@ -15,7 +15,7 @@ router.get('/', async (req,res)=>{
     let zipcodes = new Zipcode().getZipcode('서울','강남구','개포1동').then(zipcode=>zipcode);
     // console.log(await zipcodes);
 
-    res.render('zipcode',{title:'시군구동 찾기'})
+    res.render('zipcode',{title:'시군구동 찾기', sidos: await sidos, guguns: await guguns, dongs: await dongs})
 });
 
 
