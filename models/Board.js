@@ -1,9 +1,14 @@
 const oracledb = require('../models/Oracle')
 const session = require("express-session");
+const ppg = 15;
 
 let boardSql = {
     insertSql : 'insert into BOARD(BNO,TITLE,USERID,CONTENTS) VALUES(BNO.nextval,:1,:2,:3)',
     selectSql : `select BNO,TITLE,USERID,to_char(REGDATE,'YYYY-MM-DD') regdate,VIEWS FROM BOARD ORDER BY BNO DESC`,
+
+    paging :`select * from (select BNO,TITLE,USERID,to_char(REGDATE,'YYYY-MM-DD') regdate,VIEWS, row_number() over (order by bno desc) rowno
+    from BOARD`,
+    paging2 :`) bd where rowno >= :1 and rowno < :2`,
 
     selectCount :'select count(bno) cnt from board',
 
@@ -48,23 +53,20 @@ class Board {
         return inserCnt
     }
 
-    async select () {
+    async select (stnum) {
         let conn;
-        let params = [];
+        let params = [stnum,stnum + ppg];
         let board=[]
 
         try {
             conn = await oracledb.makeConn();
-            let result = await conn.execute(boardSql.selectCount, params, this.options);
-            let rs = result.resultSet;
-            let idx = -1, row = null;
-            if ((row = await rs.getRow())){
-                idx = row
-            } // 총 게시글 수
+            let idx = await this.selectCnt();
+            idx = idx - stnum +1
+             // 총 게시글 수
 
-            result = await conn.execute(boardSql.selectSql,params,this.options);
-            rs = await result.resultSet;
-            row = null;
+            let result = await conn.execute(boardSql.paging+boardSql.paging2,params,this.options);
+            let rs = await result.resultSet;
+            let row = null;
             while((row = await rs.getRow())) {
                 // clob 데이터타입을 가져오는 방법
                 const clobTitle = row[1];
@@ -84,6 +86,27 @@ class Board {
             await oracledb.clossConn(conn);
         }
         return board;
+    }
+
+    async selectCnt () { // 총 게시물 수 구하기
+        let conn;
+        let params = [];
+        let cnt = -1;
+
+        try {
+            conn = await oracledb.makeConn();
+            let result = await conn.execute(boardSql.selectCount, params, this.options);
+            let rs = result.resultSet;
+            let row = null;
+            if ((row = await rs.getRow())){
+                cnt = row
+            } // 총 게시글 수
+        } catch(e) {
+            console.log(e)
+        } finally {
+            await oracledb.clossConn(conn);
+        }
+        return cnt;
     }
 
     async selectOne (bno) {
