@@ -5,6 +5,14 @@ const Board = require('../models/Board')
 const session = require("express-session");
 const ppg = 15;
 
+const makeWhere = (ftype,fkey) => {
+    let where = ` where title = '${fkey}'`;
+    if (ftype == 'userid') where = ` where userid = '${fkey}' `
+    else if (ftype == 'contents') where = ` where contents like '%${fkey}%' `
+    return where;
+};
+
+
 router.get('/write',(req,res)=> {
     if (!req.session.userid) {
         res.redirect(303,'/member/login');
@@ -38,7 +46,10 @@ router.post('/write',async (req,res)=> {
 // stnum : (cpage - 1)*perpage +1
 // ednum : stnum + (perpage -1)
 router.get('/list',async (req,res)=> {
-    let {cpg} =req.query;
+    let cpg = req.query.cpg;
+    let ftype = req.query.ftype;
+    let fkey = req.query.fkey;
+    console.log(cpg,ftype,fkey);
     cpg = 0 ? 1 : Number(cpg);
     cpg = cpg ? Number(cpg) : 1;
     let stnum = (cpg - 1) * ppg+1; // 지정한 페이지 범위의 시작값
@@ -58,7 +69,7 @@ router.get('/list',async (req,res)=> {
     // 페이지네이션 블럭 생성
     let stpgn = parseInt((cpg-1)/10)*10 + 1;
     let stpgns = [];
-    let allcnt = new Board().selectCnt().then((cnt) => {return cnt}); // 총 게시물 수
+    let allcnt = new Board().selectCnt(makeWhere(ftype,fkey),ftype,fkey).then((cnt) => {return cnt}); // 총 게시물 수
     let alpg = Math.ceil(Number(await allcnt) /ppg)
 
     for(let i = stpgn; i < stpgn+10; ++i) {
@@ -81,9 +92,12 @@ router.get('/list',async (req,res)=> {
         'isprev10' : isprev10 , 'isnext10' : isnext10,
     }; // 이전 : 현재 페이지 -1, 다음 : 현재 페이지 + 1
 
-    let board = new Board().select(stnum).then(async (result) => {return result});
+    let board = new Board().select(stnum,ftype,fkey).then(async (result) => {return result});
 
-    res.render('board/list',{title : '게시판 목록',board: await board, stpgns:stpgns, pgn:pgn})
+    //질의문자열 정의
+    let qry = fkey? `&ftype=${ftype}&fkey=${fkey}`:'';
+
+    res.render('board/list',{title : '게시판 목록',board: await board, stpgns:stpgns, pgn:pgn, qry:qry})
 })
 router.get('/view',async (req,res)=> {
     let bno = req.query.bno
@@ -108,7 +122,6 @@ router.get('/delete',async (req,res) => {
 router.get('/update',async (req, res) => {
     let {bno, uid} = req.query;
     let suid = req.session.userid;
-    console.log('uid?',uid,'suid?',suid,'bno',bno);
 
     if (uid && suid && (uid == suid)) {
         let bds = new Board().selectOne(bno).then(bds => bds);

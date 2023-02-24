@@ -18,6 +18,15 @@ let boardSql = {
     delete: 'delete from BOARD where BNO = :1'
 }
 
+// 동적쿼리 생성 함수
+const makeWhere = (ftype,fkey) => {
+    let where = ` where title = '${fkey}'`;
+    if (ftype == 'userid') where = ` where userid = '${fkey}' `
+    else if (ftype == 'contents') where = ` where contents like '%${fkey}%' `
+    return where;
+};
+
+
 class Board {
     options = {
         resultSet: true,
@@ -53,32 +62,36 @@ class Board {
         return inserCnt
     }
 
-    async select (stnum) {
+    async select (stnum,ftype,fkey) {
         let conn;
         let params = [stnum,stnum + ppg];
         let board=[]
         let allcnt;
+        let where ='';
+
+        if (fkey !== undefined) where = makeWhere(ftype, fkey);
 
         try {
             conn = await oracledb.makeConn();
             //console.log('conn1?',conn);
-            allcnt = await this.selectCnt();
+
+            allcnt = await this.selectCnt(where);
             let idx = allcnt - stnum +1
              // 총 게시글 수
 
-            let result = await conn.execute(boardSql.paging+boardSql.paging2,params,this.options);
+            let result = await conn.execute(boardSql.paging+ where +boardSql.paging2,params,this.options);
             let rs = await result.resultSet;
             let row = null;
             while((row = await rs.getRow())) {
                 // clob 데이터타입을 가져오는 방법
-                const clobTitle = row[1];
-                let title = "";
-                clobTitle.setEncoding("utf-8");
-                clobTitle.on("data", chunk => {
-                    title += chunk;
-                });
-                await new Promise(resolve => clobTitle.on("end", resolve));
-                let a = new Board(row[0],title,row[2],row[3],'',row[4])
+                // const clobTitle = row[1];
+                // let title = "";
+                // clobTitle.setEncoding("utf-8");
+                // clobTitle.on("data", chunk => {
+                //     title += chunk;
+                // });
+                // await new Promise(resolve => clobTitle.on("end", resolve));
+                let a = new Board(row[0],row[1],row[2],row[3],'',row[4])
                 a.idx = idx--
                 board.push(a);
             }
@@ -90,14 +103,17 @@ class Board {
         return board;
     }
 
-    async selectCnt () { // 총 게시물 수 구하기
+    async selectCnt (where,ftype,fkey) { // 총 게시물 수 구하기
         let conn;
         let params = [];
         let cnt = -1;
-
         try {
             conn = await oracledb.makeConn();
-            let result = await conn.execute(boardSql.selectCount, params, this.options);
+            let result;
+            if (fkey) {
+                console.log(boardSql.selectCount + where);
+                result = await conn.execute(boardSql.selectCount + where, params, this.options);
+            } else {result = await conn.execute(boardSql.selectCount, params, this.options); }
             let rs = result.resultSet;
             let row = null;
             if ((row = await rs.getRow())){
@@ -127,24 +143,24 @@ class Board {
             while((row = await rs.getRow())) {
 
                 // clob 데이터타입을 가져오는 방법
-                const clobTitle = row[0];
-                let title = "";
-                clobTitle.setEncoding("utf-8");
-                clobTitle.on("data", chunk => {
-                    title += chunk;
-                });
-                await new Promise(resolve => clobTitle.on("end", resolve));
+                // const clobTitle = row[0];
+                // let title = "";
+                // clobTitle.setEncoding("utf-8");
+                // clobTitle.on("data", chunk => {
+                //     title += chunk;
+                // });
+                // await new Promise(resolve => clobTitle.on("end", resolve));
 
 
-                const clobContents = row[3];
-                let contents ="";
-                clobContents.setEncoding("utf-8");
-                clobContents.on("data", chunk => {
-                    contents += chunk;
-                });
-                await new Promise(resolve => clobContents.on("end", resolve));
+                // const clobContents = row[3];
+                // let contents ="";
+                // clobContents.setEncoding("utf-8");
+                // clobContents.on("data", chunk => {
+                //     contents += chunk;
+                // });
+                // await new Promise(resolve => clobContents.on("end", resolve));
 
-                let view = new Board(bno,title,row[1],row[2],contents,row[4])
+                let view = new Board(bno,row[0],row[1],row[2],row[3],row[4])
                 views.push(view);
             }
 
