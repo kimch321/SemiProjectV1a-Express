@@ -57,11 +57,13 @@ class Board {
         let conn;
         let params = [stnum,stnum + ppg];
         let board=[]
+        let allcnt;
 
         try {
             conn = await oracledb.makeConn();
-            let idx = await this.selectCnt();
-            idx = idx - stnum +1
+            //console.log('conn1?',conn);
+            allcnt = await this.selectCnt();
+            let idx = allcnt - stnum +1
              // 총 게시글 수
 
             let result = await conn.execute(boardSql.paging+boardSql.paging2,params,this.options);
@@ -150,8 +152,6 @@ class Board {
             await conn.commit();
         } catch(e) {
             console.log(e)
-        } finally {
-            await oracledb.clossConn(conn);
         }
         return views;
 
