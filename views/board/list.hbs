@@ -13,7 +13,7 @@
         .alignrgt { text-align-last: right }
 
         .pagenation { list-style: none; padding: 0;
-            margin: 0 auto; width: 500px }
+            margin: 0 auto; text-align: center;}
         .pagenation li { display: inline-block; padding: 5px 5px; }
         .cpage { font: bold 32px '맑은 고딕'; color: red;}
         .prev { color: #cccccc }
@@ -49,7 +49,13 @@
                 <td>{{userid}}</td><td>{{regdate}}</td><td>{{views}}</td></tr>
             {{/board}}
         </table>
-        <ul class="pagenation"><li><a href="?cpg={{pgn.prev}}">이전</a></li>
+        <ul class="pagenation">
+        {{#if pgn.isprev}}
+            <li><a href="?cpg={{pgn.prev}}">이전</a></li>
+        {{/if}}
+        {{#if pgn.isprev10}}
+            <li><a href="?cpg={{pgn.prev10}}">이전-10</a></li>
+        {{/if}}
         {{#stpgns}}
             {{#if iscpg}}
                 <li class="cpage">{{num}}</li>
@@ -57,5 +63,12 @@
                 <li><a href="?cpg={{num}}">{{num}}</a></li>
             {{/if}}
         {{/stpgns}}
-            <li><a href="?cpg={{pgn.next}}">다음</a></li></ul>
+            {{#if pgn.isnext10}}
+            <li><a href="?cpg={{pgn.next10}}">다음+10</a></li>
+            {{/if}}
+            {{#if pgn.isnext}}
+            <li><a href="?cpg={{pgn.next}}">다음</a></li>
+            {{/if}}
+
+        </ul>
     </main>
